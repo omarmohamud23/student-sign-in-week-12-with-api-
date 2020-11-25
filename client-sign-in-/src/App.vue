@@ -24,7 +24,8 @@ export default {
     return{
       students: [],
       message: '',
-      name: ''
+      name: '',
+      mostRecentStudent: {}
     }
   },
   components: {
@@ -33,30 +34,30 @@ export default {
     StudentMessage
   },
   mounted() {
-    this.UpdateStudents()
+    this.updateStudent()
   },
   methods: {
     newStudentAdded(student) {
       this.$student_api.addStudent(student).then(student => {
-        this.UpdateStudents()
+        this.updateStudent()
       }).catch( err => {
         let message = err.response.data.join(',')
         alert('Error adding student,' , message)
       })
     },
-    studentArrivedOrLeft(student) {
-      this.$student_api.UpdateStudent(student).then( () => {
-        this.name = student.name 
-        this.message = student.present ? 'Welcome, ' : 'Goodbye, '
-        this.UpdateStudents()
+    studentArrivedOrLeft(student, arrived) {
+      student.present  = arrived
+      this.$student_api.updateStudent(student).then( () => {
+        this.mostRecentStudent = student
+        this.updateStudent()
       })
     },
     studentDeleted (student) {
-      this.$$student_api.deleteStudent(student).then ( () => {
-        this.UpdateStudents()
+      this.$student_api.deleteStudent(student).then ( () => {
+        this.updateStudent()
       })
     },
-    UpdateStudents() {
+    updateStudent() {
       this.$student_api.getAllStudents().then(students => {
         this.students = students  
       })
