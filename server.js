@@ -4,6 +4,8 @@ let api_routes = require('./routes/api.js')
 
 
 let app = express()
+app.use(express.static(path.join(__dirname, 'client-sign-in-', 'dist')))
+
 app.use(bordyParser.json())
 
 app.use('/api', api_routes)
