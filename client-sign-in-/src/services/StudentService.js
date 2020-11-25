@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { response } from 'express'
 
 const base_url  = '/api/students'
 
